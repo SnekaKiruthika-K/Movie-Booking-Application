@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #booking-form {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .form-section, .refreshments-section {
+            flex: 1;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="number"], select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .refreshments-section {
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        .refreshments-section label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .seat-section {
+            margin-bottom: 20px;
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            background-color: #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .seat.selected {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .front-row {
+            background-color: #ffcccc;
+        }
+
+        .middle-row {
+            background-color: #ccccff;
+        }
+
+        .back-row {
+            background-color: #ccffcc;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="movie-name"></h1>
+
+        <form id="booking-form" method="POST" action="booking.php">
+            <!-- Hidden inputs to store data -->
+            <input type="hidden" id="movie_name" name="movie_name">
+            <input type="hidden" id="selected_seats" name="selected_seats">
+            <input type="hidden" id="tickets" name="tickets">
+            <input type="hidden" id="refreshments" name="refreshments">
+            <input type="hidden" id="total_amount" name="total_amount">
+
+            <!-- Seat Selection Section -->
+            <div class="form-section">
+                <h3>Select Your Seats:</h3>
+                <div class="seat-section">
+                    <div class="seat-grid" id="seat-grid">
+                        <!-- Seats will be generated dynamically -->
+                    </div>
+                </div>
+
+                <label for="selected-seats">Selected Seats:</label>
+                <input type="text" id="selected-seats" readonly>
+
+                <label for="tickets">Number of Tickets:</label>
+                <input type="number" id="tickets" min="1" value="1" readonly>
+
+                <label for="total-amount">Total Amount:</label>
+                <input type="text" id="total-amount" readonly>
+            </div>
+
+            <!-- Refreshments Section -->
+            <div class="refreshments-section">
+                <h3>Refreshments (Optional):</h3>
+                <label><input type="checkbox" value="50"> Popcorn (₹50)</label>
+                <label><input type="checkbox" value="60"> Cold Drink (₹60)</label>
+                <label><input type="checkbox" value="70"> Nachos (₹70)</label>
+                <label><input type="checkbox" value="40"> Chips (₹40)</label>
+                <label><input type="checkbox" value="80"> Burger (₹80)</label>
+                <label><input type="checkbox" value="30"> Candy (₹30)</label>
+                <label><input type="checkbox" value="90"> Pizza Slice (₹90)</label>
+                <label><input type="checkbox" value="20"> Water Bottle (₹20)</label>
+                <label><input type="checkbox" value="100"> Ice Cream (₹100)</label>
+                <label><input type="checkbox" value="25"> Hot Dog (₹25)</label>
+            </div>
+        </form>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button type="button" onclick="calculateTotal()">Calculate Total</button>
+            <button type="button" onclick="confirmBooking()">Confirm Booking</button>
+        </div>
+    </div>
+
+    <script>
+        // Extract the movie name from the URL
+        const params = new URLSearchParams(window.location.search);
+        const movieName = params.get('movie');
+        document.getElementById('movie-name').textContent = `Booking for: ${movieName}`;
+
+        const seatGrid = document.getElementById('seat-grid');
+        const selectedSeatsInput = document.getElementById('selected-seats');
+        const ticketsInput = document.getElementById('tickets');
+        const totalAmountInput = document.getElementById('total-amount');
+
+        // Seat categories and prices
+        const seatCategories = {
+            front: 100,
+            middle: 150,
+            back: 200
+        };
+
+        const rows = ['A', 'B', 'C', 'D', 'E'];
+        const cols = 8;
+        let selectedSeats = [];
+
+        rows.forEach((row, rowIndex) => {
+            for (let col = 1; col <= cols; col++) {
+                const seat = document.createElement('div');
+                seat.className = `seat ${rowIndex < 2 ? 'front-row' : rowIndex < 4 ? 'middle-row' : 'back-row'}`;
+                seat.textContent = `${row}${col}`;
+                seat.dataset.price = rowIndex < 2 ? seatCategories.front : rowIndex < 4 ? seatCategories.middle : seatCategories.back;
+                seat.addEventListener('click', () => toggleSeat(seat));
+                seatGrid.appendChild(seat);
+            }
+        });
+
+        function toggleSeat(seat) {
+            const seatNumber = seat.textContent;
+
+            if (seat.classList.contains('selected')) {
+                seat.classList.remove('selected');
+                selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+            } else {
+                seat.classList.add('selected');
+                selectedSeats.push(seatNumber);
+            }
+
+            selectedSeatsInput.value = selectedSeats.join(', ');
+            ticketsInput.value = selectedSeats.length;
+        }
+
+        function calculateTotal() {
+            let seatCost = 0;
+
+            document.querySelectorAll('.seat.selected').forEach(seat => {
+                seatCost += parseInt(seat.dataset.price);
+            });
+
+            const refreshments = document.querySelectorAll('.refreshments-section input:checked');
+            let refreshmentCost = 0;
+            refreshments.forEach(item => {
+                refreshmentCost += parseInt(item.value);
+            });
+
+            const totalAmount = seatCost + refreshmentCost;
+            totalAmountInput.value = `₹${totalAmount}`;
+        }
+
+        function confirmBooking() {
+            // Prevent form submission to ensure we can process everything first
+            const movieName = document.getElementById('movie-name').textContent.replace('Booking for: ', '');
+            const selectedSeats = document.getElementById('selected-seats').value || 'No seats selected';
+            const tickets = document.getElementById('tickets').value;
+            const totalAmount = document.getElementById('total-amount').value || '₹0';
+
+            // Get selected refreshments
+            const refreshments = [];
+            document.querySelectorAll('.refreshments-section input:checked').forEach(item => {
+                refreshments.push(item.parentElement.textContent.trim());
+            });
+
+            const refreshmentDetails = refreshments.length > 0 ? refreshments.join(', ') : 'No refreshments selected';
+
+            // Append data to hidden form fields
+            document.getElementById('movie_name').value = movieName;
+            document.getElementById('selected_seats').value = selectedSeats;
+            document.getElementById('tickets').value = tickets;
+            document.getElementById('refreshments').value = refreshmentDetails;
+            document.getElementById('total_amount').value = totalAmount;
+
+            // Submit the form
+            document.getElementById('booking-form').submit();
+        }
+    </script>
+</body>
+</html>

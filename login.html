@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights. Camera. Book Tickets!</title>
+    <style>
+#login-form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#login-form-container h2 {
+    text-align: center;
+    color: #680023;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: #555;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#login-form-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #680023;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#login-form-container button:hover {
+    background-color: #575757;
+}
+
+.subcontent {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+}
+
+#register-link {
+    color: #680023;
+    text-decoration: none;
+}
+
+#register-link:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+<div id="login-form-container" class="content">
+    <h2>Login</h2>
+    <form id="login-form" action="home.html" method="POST">
+        <div class="form-group">
+            <label for="username">Username or Email:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn1">Login</button>
+    </form>
+    <p class="subcontent">Don't have an account? <a href="register.html" id="register-link">Register here</a></p>
+</div>
+
+</body>
+</html>

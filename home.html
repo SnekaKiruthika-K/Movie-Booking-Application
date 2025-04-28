@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights. Camera. Book Tickets!</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="heading1">
+            <h1 id="main-heading">Lights. Camera. Book Tickets!</h1>
+        </div>
+
+        <div class="nav-bar">
+            <ul>
+                <li class="one"><a href="#home">Home</a></li>
+                <li class="two"><a href="#about">About</a></li>
+                <li class="three"><a href="#movies">Movies</a></li>
+                <li class="four"><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="subcontent">
+                <p>Cinema is a captivating blend of art and entertainment that transports audiences into different worlds, emotions, and stories. It offers a rich variety of genres...</p>
+        </div>
+        <div class="content">
+            <marquee behavior="" direction="right">Book. Watch. Enjoy. Repeat!</marquee>
+            <div class="search-form">
+                <input type="text" id="movie-search" placeholder="Search Movies">
+                <button class="btn1" onclick="searchMovie()">Search</button>
+            </div>
+
+            <div id="movies-list">
+                <div class="movie-card">
+                    <img src="jawan.jpg" alt="Movie 1">
+                    <h3>Jawan</h3>
+                    <p>Action, Drama, Thriller</p>
+                    <p>Duration: 2h 45m</p>
+                    <button class="book-btn" onclick="bookNow('Jawan')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="vikram 2.jpg" alt="Movie 2">
+                    <h3>Vikram 2</h3>
+                    <p>Action, Thriller</p>
+                    <p>Duration: 2h 30m</p>
+                    <button class="book-btn" onclick="bookNow('Vikram 2')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="thunivu.jpg" alt="Movie 3">
+                    <h3>Thunivu</h3>
+                    <p>Action, Thriller</p>
+                    <p>Duration: 2h 15m</p>
+                    <button class="book-btn" onclick="bookNow('Thunivu')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="maanadu.jpg" alt="Movie 4">
+                    <h3>Maanaadu</h3>
+                    <p>Action, Sci-Fi, Thriller</p>
+                    <p>Duration: 2h 10m</p>
+                    <button class="book-btn" onclick="bookNow('Maanaadu')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="kaithi2.jpg" alt="Movie 5">
+                    <h3>Kaithi 2</h3>
+                    <p>Action, Thriller, Crime</p>
+                    <p>Duration: 2h 20m</p>
+                    <button class="book-btn" onclick="bookNow('kaithi2')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="don.jpg" alt="Movie 6">
+                    <h3>Don</h3>
+                    <p>Comedy, Drama</p>
+                    <p>Duration: 2h 5m</p>
+                    <button class="book-btn" onclick="bookNow('Don')">Book Now</button>
+                </div>
+                <div class="movie-card">
+                    <img src="beast.jpg" alt="Movie 7">
+                    <h3>Beast</h3>
+                    <p>Action, Thriller</p>
+                    <p>Duration: 2h 30m</p>
+                    <button class="book-btn" onclick="bookNow('Beast')">Book Now</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="footer" id="contact">
+            <pre>
+              <center>
+                2025 Movies Copyright
+                +91 123-456-789
+                movies@gmail.com
+                Tiruppur
+              </center>
+            </pre>
+        </div>
+    </div>
+    <script>
+    function bookNow(movieName) {
+        window.location.href = `booking.html?movie=${encodeURIComponent(movieName)}`;
+    }
+</script>
+</body>
+</html>
